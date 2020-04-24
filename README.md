@@ -33,7 +33,7 @@ All successive transitions are shown.
 
 Although it is quite difficult to calculate exact complexity of the algorithm used, two things can be said:
 
-- Best-case is `O(1)` as testing divisibility by 2 is easy
+- Best-case is almost `O(1)` as testing divisibility by 2 is easy
 - Worst-case seems reasonably close to `Θ(n lg²n)` according to experimental data
 
 Fig1 plots the number of transitions T as a function of the number to be tested N. It is the direct output of executing `plotter.py`.
