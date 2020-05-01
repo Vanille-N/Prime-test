@@ -1,0 +1,16 @@
+// TODO
+
+- graph other Θ than n lg² n for comparison
+- readme explain build
+- readme explain how it all works
+- cleanup macro
+- review color scheme
+- spacing in code
+- replace L/R with </>
+
+#define move(op) "\000\002\001"[2 op 0]-1
+#define test(op) printf("%d\n", move(op))
+
+test(>) -> 1
+test(<) -> -1
+test(-) -> 0
