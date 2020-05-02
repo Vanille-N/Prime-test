@@ -62,6 +62,8 @@ $ python3 plotter.py
 
 (Requires `matplotlib`)
 
+You may safely delete `save.txt`, as it is only used for caching and will be restored by the script. Be aware though that the cached results are worth several hour of computation.
+
 ## How does it even work ?
 
 I will not go into the details of the algorithm itself, because
