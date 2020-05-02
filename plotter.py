@@ -27,7 +27,7 @@ def data(n):
     os.system("echo {} > in.txt".format(n))
     os.system("./prime < in.txt | wc -l > out.txt")
     with open("out.txt", 'r') as f:
-        T = int(f.readline()) - 1
+        T = int(f.readline()) - 3
     K[n] = T
     print(n)
     return T
@@ -47,15 +47,14 @@ def fit(F, Y):
     Z = Z[-j:]
     return max(y/f for y,f in Z)
 
-def disp(lo, hi, theta=None):
+def disp(lo, hi, theta=[]):
     X = [*range(lo, hi)]
     Y = gather(lo, hi)
     plt.xlabel(r"$N$", size=16)
     plt.yscale('log')
     plt.ylabel(r"$T$", size=16)
     plt.scatter(X, Y, label=r"$f$", c='red', s=0.1)
-    if theta is not None:
-        f, l = theta
+    for f,l in theta:
         F = [f(x) for x in X]
         c = fit(F, Y)
         plt.plot(X, [f*c for f in F], label=l)
@@ -70,7 +69,7 @@ nlg2n = (lambda n: n*log(n)**2, r"$\Theta(n\ lg^2n)$")
 nsqnlgn = (lambda n: n**1.5*log(n), r"$\Theta(n \sqrt{n}\ lg\ n)$")
 nsqnlg2n = (lambda n: n**1.5*log(n)**2, r"$\Theta(n \sqrt{n}\ lg^2n)$")
 
-disp(1, 21000, theta=nlg2n)
+disp(1, 3000, theta=[nlg2n])
 
 with open("save.txt", "w") as k:
     for n in K:
