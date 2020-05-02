@@ -11,7 +11,7 @@
 static int tape [246] ;
 int * h = tape + 128 ;
 
-#define DELTA(q,n_,c_,m_,no,co,mo,ni,ci,mi,nO,cO,mO,nI,cI,mI) \
+#define DELTA(q, n_,c_,m_, no,co,mo, ni,ci,mi, nO,cO,mO, nI,cI,mI) \
     Q##q: \
     printf("\t{State %d}\t{read %c}\t",q,"_01OI"[*h]);for(int j=100;j<140;j++)printf("%s%c",(h==tape+j)?"\033[31m":"\033[0m" ,"_01OI"[tape[j]]);printf("\033[0m\n"); \
     switch(*h){ \
