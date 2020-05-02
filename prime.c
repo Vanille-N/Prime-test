@@ -15,10 +15,10 @@ static char translate [5] = {'_', '0', '1', 'O', 'I'} ;
 
 #define DELTA(q, n_, c_, m_, no, co, mo, ni, ci, mi, nO, cO, mO, nI, cI, mI) \
     Q##q: \
-        printf("State %d read %c ", q, translate[*h]) ; \
-    for (int j = 100; j < 140; j++) printf("%c", translate[tape[j]]) ; \
-    putchar('\n') ; \
-	switch (*h) { \
+        printf("\t{State %d}\t{read %c}\t", q, translate[*h]) ; \
+    for (int j = 100; j < 140; j++) printf("%s%c", (h==tape+j)?"\033[31m":"\033[0m" ,translate[tape[j]]) ; \
+    printf("\033[0m\n") ; \
+    switch (*h) { \
         case _: *h=(c_==_?_:c_) ; h+=(m_==_?0:m_) ; if(n_==_){if(c_==_&&m_==_){goto Q_;}else{goto Q##q;}}else{goto Q##n_;} \
         case o: *h=(co==_?o:co) ; h+=(mo==_?0:mo) ; if(no==_){if(co==_&&mo==_){goto Q_;}else{goto Q##q;}}else{goto Q##no;} \
         case i: *h=(ci==_?i:ci) ; h+=(mi==_?0:mi) ; if(ni==_){if(ci==_&&mi==_){goto Q_;}else{goto Q##q;}}else{goto Q##ni;} \
@@ -28,6 +28,7 @@ static char translate [5] = {'_', '0', '1', 'O', 'I'} ;
 
 int main () {
     int n ;
+    printf("  input > ");
     scanf("%d", &n);
     for(int c=1;n;c<<=1){*(--h)=(n&c)?i:o;n&=~c;}
     DELTA(  0,  1,_,L,  _,_,R,  _,_,R,  _,_,_,  _,_,_)
@@ -80,7 +81,7 @@ int main () {
     DELTA( 47, 50,_,_, 21,i,R,  _,o,L,  _,_,_,  _,_,_)
     DELTA( 48, 51,_,_, 51,_,_, 49,_,L,  _,_,_,  _,_,_)
     DELTA( 49, 50,_,_,  _,_,L, 51,_,_,  _,_,_,  _,_,_)
-    Q50: printf("\033[1;32m Accept \033[0m") ; goto Q_ ;
-    Q51: printf("\033[1;31m Reject \033[0m") ; goto Q_ ;
+    Q50: printf("\n\n\t\t\t\033[1;32m Accept \033[0m") ; goto Q_ ;
+    Q51: printf("\n\n\t\t\t\033[1;31m Reject \033[0m") ; goto Q_ ;
     Q_: printf("done\n") ; return 0 ;
 }
