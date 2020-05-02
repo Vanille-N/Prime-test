@@ -257,4 +257,4 @@ The behavior is determined by the contents of `mx`. When no movement is done, th
 
 As it is essentially useless to write without moving, taking into account the value of `cx` in the interpretation of `nx` was deemed unnecessary.
 
-The `2 m_ 0 == 2` test a subset of the trick explained in NOTE #2: it tests whether `m_` is `-`
+The `2 m_ 0 == 2` test is a subset of the trick explained in NOTE #2: it tests whether `m_` is `-`
