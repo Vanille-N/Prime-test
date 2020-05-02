@@ -32,7 +32,7 @@ All successive transitions are printed to `stdout`, and can thus easily be count
 
 Although it is quite difficult to calculate exact complexity of the algorithm used, two things can be said:
 
-- Best-case is almost `O(1)` as testing divisibility by 2 is easy (though it requires moving to the end of the number, thus incurring a `Ω(lg n)`)
+- Best-case is almost `O(1)` as testing divisibility by 2 is easy but a prerequisite is being at the end of the number, thus incurring a `Ω(lg n)`
 - Worst-case seems reasonably close to `Θ(n lg²n)` according to experimental data
 
 Fig1 plots the number of transitions T as a function of the number to be tested N. It is the direct output of executing `plotter.py`.
@@ -62,7 +62,7 @@ $ python3 plotter.py
 
 (Requires `matplotlib`)
 
-You may safely delete `save.txt`, as it is only used for caching and will be restored by the script. Be aware though that the cached results are worth several hour of computation.
+You may safely delete `save.txt`, as it is only used for caching and will be restored by the script. Be aware though that the cached results are worth several hours of computation.
 
 ## How does it even work ?
 
