@@ -28,14 +28,39 @@ DELTA( 36, 43,_,>, 37,O,>, 38,I,>,  _,_,<,  _,_,<)
 
 This short program implements such a Turing Machine that uses 1 tape, 52 states, and 5 symbols to determine whether a positive integer given as input is a prime number.
 
-All successive transitions are shown.
+All successive transitions are printed to `stdout`, and can thus easily be counted by piping the executable to `wc -l`.
 
 Although it is quite difficult to calculate exact complexity of the algorithm used, two things can be said:
 
-- Best-case is almost `O(1)` as testing divisibility by 2 is easy
+- Best-case is almost `O(1)` as testing divisibility by 2 is easy (though it requires moving to the end of the number, thus incurring a `Ω(lg n)`)
 - Worst-case seems reasonably close to `Θ(n lg²n)` according to experimental data
 
 Fig1 plots the number of transitions T as a function of the number to be tested N. It is the direct output of executing `plotter.py`.
+
+## How to install and run
+```bash
+$ git clone https://github.com/Vanille-N/Prime-test
+$ cd Prime-test
+$ gcc -o prime prime.c
+```
+
+For a simple run
+```bash
+$ ./prime
+```
+then enter the input as prompted.
+
+For the graph
+```bash
+$ chmod u+x plotter.py
+$ ./plotter
+```
+or
+```bash
+$ python3 plotter.py
+```
+
+(Requires `matplotlib`)
 
 ## How does it even work ?
 
