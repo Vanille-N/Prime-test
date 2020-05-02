@@ -154,7 +154,7 @@ It is important to note that all `_` here have different meanings : the '`_`' in
 Indeed, the next case `*h = (co == _ ? o : co)` is proof that the `_` changed to `_` and the `_` changed to `o` have different meanings.
 
 
-#### NOTE #2
+#### NOTE #2 : Move
 ```c
 h += "\000\002\001"[2 m_ 0] - 1 ;
 ```
@@ -187,3 +187,47 @@ DELTA(  0,  1,_,<,  _,_,>,  _,_,>,  _,_,-,  _,_,-)
 ```
 Left and right are immediately understood without the need for mentally translating `L` and `R` into full words, and the "do not move" transition now has a distinct appearance from the other `_`. NOTE #3 shows that the movement plays a particular role, and deserves a different symbol.
 
+To understand how it works, let's consider a simpler case and expand the macro using https://godbolt.org/ with compiler option `-E` :
+
+```c
+#define move(op) "\000\002\001"[2 op 0]-1
+
+move(>)
+move(<)
+move(-)
+```
+translates to
+```c
+"\000\002\001"[2 > 0]-1
+"\000\002\001"[2 < 0]-1
+"\000\002\001"[2 - 0]-1
+```
+
+We once again use string indexing to map `int -> int`.
+
+```
+move(>)    -->    "\000\002\001"[2 > 0]-1    -->    "\000\002\001"[1]-1    -->    '\002'-1    -->    1
+move(<)    -->    "\000\002\001"[2 < 0]-1    -->    "\000\002\001"[0]-1    -->    '\000'-1    -->   -1
+move(-)    -->    "\000\002\001"[2 - 0]-1    -->    "\000\002\001"[2]-1    -->    '\001'-1    -->    0
+```
+And we have a macro that maps `<`, `-`, `>` to `-1`, `0`, `1`!
+
+#### NOTE #3 : State transition
+```c
+if (n_ == _) {
+    if (c_ == _ && 2 m_ 0 == 2) {
+        goto Q_ ;
+    } else {
+        goto Q##q ;
+    }
+} else {
+    goto Q##n_ ;
+}
+```
+Due to some design decisions, there are some complex combinatorics involved. When a next state is provided the transition is done to that state (`goto Q##n_`), but when no state is given there are two possibilities : it can mean either not to move, or to go to the garbage state.
+
+The behavior is determined by the contents of `mx`. When no movement is done, the transition is considered blank: `_,_,-` expands to "abort execution without writing anything", while `_,_,<` means "do not overwrite, move left, stay in the same state" and `_,o,>` means "write `o`, move right, stay in the same state.
+
+As it is essentially useless to write without moving, taking into account the value of `cx` in the interpretation of `nx` was deemed unnecessary.
+
+The `2 m_ 0 == 2` test a subset of the trick explained in NOTE #2: it tests whether `m_` is `-`
