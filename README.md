@@ -76,7 +76,7 @@ For each tape symbol (`_`, `o`, `O`, `i`, `I`) there are three parameters :
 One additional parameter `q` is provided : it indicates the identifier of the current state. Any other state that has this state's `q` as one of its `nx`s may result in a transition to this state.
 
 One special state `_` is the garbage state.
-Any transition that leads to `_` (see precision later) is either a final transition (notice that the two states `50 (Accept)` and `51 (Reject)` have a transition to `_`) or an error after the program was put in a configuration that is impossible under correct execution (e.g. `DELTA(  0,  1,_,<,  _,_,>,  _,_,>,  _,_,-,  _,_,-)`, the tape is composed only of `o`s and `i`, seeing a `O` results in aborting the program).
+Any transition that leads to `_` (see precision later) is either a final transition (notice that the two states `50 (Accept)` and `51 (Reject)` have a transition to `_`) or an error after the program was put in a configuration that is impossible under correct execution (e.g. `DELTA(  0,  1,_,<,  _,_,>,  _,_,>,  _,_,-,  _,_,-)`, at the very beginning the tape is composed only of `o`s and `i` (and `_`s), seeing a `O` results in aborting the program).
 
 ```c
 Q##q:
@@ -113,14 +113,14 @@ There is a lot to unpack :
     - a state of the tape
         - `o`, `i`, `O`, `I`, `_` are printed as `0`, `1`, `O`, `I`, `_`
         - `"_01OI"[*h]` serves as a translator :
-            - _ => 0 => '_'
-            - o => 1 => '0'
-            - i => 2 => '1'
-            - O => 3 => 'O'
-            - I => 4 => 'I'
+            - `_ => 0 => '_'`
+            - `o => 1 => '0'`
+            - `i => 2 => '1'`
+            - `O => 3 => 'O'`
+            - `I => 4 => 'I'`
         - the position of the head is printed in red using ANSI codes
-            - (h == tape + j) ? "\033[31m" : "\033[0m"
-            - ^ under head ?    ^ red        ^ white
+            - `(h == tape + j) ? "\033[31m" : "\033[0m"`
+            - `^~under~head~?.....^~red~~~.....^~white`
 - then the main logic for the transition comes
 ```c
 switch (*h) {                              // match the current symbol
@@ -138,3 +138,52 @@ switch (*h) {                              // match the current symbol
         }
 [...]
 ```
+
+#### NOTE #1 : The writer
+```c
+*h = (c_ == _ ? _ : c_) ;
+```
+The `c_` (more generally `cx`) parameter indicates the symbol to write when `_` (`x`) is read, but there is one exception: it is impossible to write `_`! The symbol `_` only represents a tape cell that has never been overwritten.
+
+When `i`, `o`, `I` or `O` are provided, they are written, but `_` means that the tape should not be overwritten.
+
+This behavior allows us to focus on the transitions that are interesting: the parts of the transitions where nothing happens are marked as `_` or `-` and do not stand out, which makes reading the machine a bit easier.
+
+It is important to note that all `_` here have different meanings : the '`_`' in `c_` means "the symbol that was read", the first '`_`' means "do not overwrite", which is translated into the second '`_`': "rewrite the same symbol".
+
+Indeed, the next case `*h = (co == _ ? o : co)` is proof that the `_` changed to `_` and the `_` changed to `o` have different meanings.
+
+
+#### NOTE #2
+```c
+h += "\000\002\001"[2 m_ 0] - 1 ;
+```
+
+This is probably the trick I'm the most proud of. At first sight it seems unreadable, but thanks to this the syntax for the transition is a lot more readable.
+
+Earlier versions of the machine used the following:
+```c
+#define L -1      // Left
+#define R 1       // Right
+```
+and the line in question was replaced with
+```c
+h += (m_ == _ ? 0 : m_) ;
+```
+which was just a more secure way of writing
+```c
+h += m_ ;
+```
+because it did not assume that `_` was necessarily `0`.
+
+Thus transitions looked like this :
+```c
+DELTA(  0,  1,_,L,  _,_,R,  _,_,R,  _,_,_,  _,_,_)
+```
+
+On the other hand, consider the much more elegant :
+```c
+DELTA(  0,  1,_,<,  _,_,>,  _,_,>,  _,_,-,  _,_,-)
+```
+Left and right are immediately understood without the need for mentally translating `L` and `R` into full words, and the "do not move" transition now has a distinct appearance from the other `_`. NOTE #3 shows that the movement plays a particular role, and deserves a different symbol.
+
