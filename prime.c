@@ -15,11 +15,11 @@ int * h = tape + 128 ;
     Q##q: \
     printf("\t{State %d}\t{read %c}\t",q,"_01OI"[*h]);for(int j=100;j<140;j++)printf("%s%c",(h==tape+j)?"\033[31m":"\033[0m" ,"_01OI"[tape[j]]);printf("\033[0m\n"); \
     switch(*h){ \
-        case _:*h=(c_==_?_:c_);h+="\000\002\001"[2 m_ 0]-1; if(n_==_){if(c_==_&&2 m_ 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##n_;} \
-        case o:*h=(co==_?o:co);h+="\000\002\001"[2 mo 0]-1; if(no==_){if(co==_&&2 mo 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##no;} \
-        case i:*h=(ci==_?i:ci);h+="\000\002\001"[2 mi 0]-1; if(ni==_){if(ci==_&&2 mi 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##ni;} \
-        case O:*h=(cO==_?O:cO);h+="\000\002\001"[2 mO 0]-1; if(nO==_){if(cO==_&&2 mO 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##nO;} \
-        case I:*h=(cI==_?I:cI);h+="\000\002\001"[2 mI 0]-1; if(nI==_){if(cI==_&&2 mI 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##nI;} \
+        case _:*h=(c_==_?_:c_);h+="\000\002\001"[2 m_ 0]-1; (n_==_)?({(c_==_&&2 m_ 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n_;}); \
+        case o:*h=(co==_?o:co);h+="\000\002\001"[2 mo 0]-1; (no==_)?({(co==_&&2 mo 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##no;}); \
+        case i:*h=(ci==_?i:ci);h+="\000\002\001"[2 mi 0]-1; (ni==_)?({(ci==_&&2 mi 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##ni;}); \
+        case O:*h=(cO==_?O:cO);h+="\000\002\001"[2 mO 0]-1; (nO==_)?({(cO==_&&2 mO 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##nO;}); \
+        case I:*h=(cI==_?I:cI);h+="\000\002\001"[2 mI 0]-1; (nI==_)?({(cI==_&&2 mI 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##nI;}); \
     }
 
 int main () {
