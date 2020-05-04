@@ -50,6 +50,22 @@ $ python3 plotter.py
 You may safely delete `save.txt`, as it is only used for caching and will be restored by the script. Be aware though that the cached results are worth several hours of computation.
 
 
+The initialisation:
+```c
+for(int c=1;n;c<<=1){*(--h)=(n&c)?i:o;n&=~c;}
+```
+expands to
+```c
+for (int c = 1; n; c <<= 1) {      // for each bit
+    *(--h) = (n & c) ? i : o ;     // write o (0) or i (1) to the tape
+    n &= ~c ;                      // clear the bit in the source integer
+}
+```
+and is just a compact way to convert the input to base 2.
+
+
+On to the main stuff !
+
 ### N.B.
 
 This machine predates the creation of `tmake` (see in the project root), which is merely a generalization of this.
