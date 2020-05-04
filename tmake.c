@@ -1,80 +1,67 @@
 #include <stdio.h>
 
-
-#define MAX_LEN_NAME 10
 #define MAX_NB_SYM 62
-
 
 enum err {
     OK,
-    TOO_FEW_ARGS,
     TOO_MANY_ARGS,
-    WRONG_NAME,
+    TOO_FEW_ARGS,
+    UNKNOWN_OPTION,
     WRONG_SYMBOL
 };
 
 
 int streq(char *, char *);
-void err_too_few ();
 void err_too_many (int);
-void err_wrong_name (int, char *);
+void err_too_few ();
 void err_wrong_sym (int, char *);
+void err_wrong_option (char *);
 void print_help ();
-int is_valid_name (char *, int *);
 int is_alpha (char);
 int is_number (char);
 void cpy (char *, char *, int *);
 int is_valid_symlist (char *, int *);
 int sym_identify (char);
-void make_template (char *, int, char *, int);
+void make_template (char *, int, int);
 void repeat (char, int);
 
 
 int main (int argc, char * argv []) {
-    if (argc == 1) { err_too_few(); return TOO_FEW_ARGS; }
     if (argc > 3) { err_too_many(argc); return TOO_MANY_ARGS; }
+    if (argc == 1) { err_too_few(); return TOO_FEW_ARGS; }
     if (streq(argv[1], "-h")) {
         print_help();
         return OK;
     }
-    char name [MAX_LEN_NAME + 1];
-    int len_name = 0;
     char symbols [MAX_NB_SYM + 1];
     int cnt_sym = 0;
     int info;
-    if (is_valid_name(argv[1], &info)) {
-        cpy(name, argv[1], &len_name);
-    } else {
-        err_wrong_name(info, argv[1]);
-        return WRONG_NAME;
-    }
-    if (argc == 3) {
-        if (is_valid_symlist(argv[2], &info)) {
-            cpy(symbols, argv[2], &cnt_sym);
+    if (argc >= 2) {
+        if (is_valid_symlist(argv[1], &info)) {
+            cpy(symbols, argv[1], &cnt_sym);
         } else {
-            err_wrong_sym(info, argv[2]);
+            err_wrong_sym(info, argv[1]);
             return WRONG_SYMBOL;
         }
     }
+    int ternary = 1;
+    if (argc == 3) {
+        if (streq(argv[2], "-t")) {
+            ternary = 0;
+        } else {
+            err_wrong_option(argv[1]); return UNKNOWN_OPTION;
+        }
+    }
 
-    make_template(name, len_name, symbols, cnt_sym);
-}
-
-
-void err_too_few () {
-    printf("You have not provided any arguments.\nPlease provide at least a name for your machine (and optionally a list of symbols).\n");
+    make_template(symbols, cnt_sym, ternary);
 }
 
 void err_too_many (int argc) {
-    printf("You have given %d arguments, when the maximum is 2: a name and a list of symbols.", argc);
+    printf("You have given %d arguments, when the maximum is 1: a list of symbols.", argc);
 }
 
-void err_wrong_name (int info, char * arg) {
-    if (info == -1) {
-        printf("`%s` is too long: the limit is %d characters.\n", arg, MAX_LEN_NAME);
-    } else {
-        printf("`%c` at position %d is invalid for a file identifier.\nPlease choose a name with format [a-zA-Z][a-zA-Z0-9_\\-]* instead.\n", arg[info], info);
-    }
+void err_too_few () {
+    printf("You have not provided any arguments.\nPlease provide a list of symbols).\n");
 }
 
 void err_wrong_sym (int info, char * arg) {
@@ -87,26 +74,12 @@ void err_wrong_sym (int info, char * arg) {
     }
 }
 
-void print_help () {
-    printf("/== PLACEHOLDER ==/\n");
+void err_wrong_option (char * arg) {
+    printf("`%s` is not a valid option. Use -h for more details.", arg);
 }
 
-int is_valid_name (char * arg, int * info) {
-    if (!is_alpha(arg[0])) {
-        *info = 0;
-        return 0;
-    }
-    for (int i = 1; arg[i] != '\0'; i++) {
-        if (i >= MAX_LEN_NAME) {
-            *info = -1;
-            return 0;
-        }
-        if (!(is_alpha(arg[i]) || is_number(arg[i]) || arg[i] == '_' || arg[i] == '-')) {
-            *info = i;
-            return 0;
-        }
-    }
-    return 1;
+void print_help () {
+    printf("/== PLACEHOLDER ==/\n");
 }
 
 int is_alpha (char c) {
@@ -167,7 +140,7 @@ int sym_identify (char s) {
     }
 }
 
-void make_template (char * name, int len, char * symbols, int cnt) {
+void make_template (char * symbols, int cnt, int ter) {
     printf("#include <stdio.h>\n\n");
     int idx [cnt+1];
     char sym [cnt+1];
@@ -209,7 +182,11 @@ void make_template (char * name, int len, char * symbols, int cnt) {
     printf(") \\\n\tQ##q: \\\n");
     printf("\tprintf(\"\\t{State %%d}\\t{read %%c}\\t\",q,tsl[9-*h]);for(int j=100;j<140;j++)printf(\"%%s%%c\",(h==tape+j)?\"\\033[31m\":\"\\033[0m\" ,tsl[1-tape[j]]);printf(\"\\033[0m\\n\"); \\\n\tswitch(*h){ \\\n");
     for (int i = 0; i <= cnt; i++) {
-        printf("\t\tcase %c:*h=(c%c==_?%c:c%c);h+=\"\\0\\2\\1\"[2 m%c 0]-1;(n%c==_)?({(c%c==_&&2 m%c 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n%c;}); \\\n", sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i]);
+        if (ter) {
+            printf("\t\tcase %c:*h=(c%c==_?%c:c%c);h+=\"\\0\\2\\1\"[2 m%c 0]-1;(n%c==_)?({(c%c==_&&2 m%c 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n%c;}); \\\n", sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i]);
+        } else {
+            printf("\t\tcase %c:*h=(c%c==_?%c:c%c);h+=\"\\0\\2\\1\"[2 m%c 0]-1;if(n%c==_){if(c%c==_&&2 m%c 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##n%c;} \\\n", sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i]);
+        }
     }
     printf("\t}\n\nint main () {\n");
     printf("printf(\"  input > \");\n");
