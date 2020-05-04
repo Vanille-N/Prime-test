@@ -1,4 +1,4 @@
-# prime_test
+# prime
 
 ## A Turing machine to test primality
 
