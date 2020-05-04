@@ -57,7 +57,7 @@ int main (int argc, char * argv []) {
 }
 
 void err_too_many (int argc) {
-    printf("You have given %d arguments, when the maximum is 1: a list of symbols.", argc);
+    printf("You have given %d arguments, when the maximum is 2: a list of symbols and an option\n", argc);
 }
 
 void err_too_few () {
@@ -156,11 +156,13 @@ void make_template (char * symbols, int cnt, int ter) {
     }
     idx[0] = -1;
     sym[0] = '_';
+    printf("enum SYMBOLS {");
     for (int i = 0; i <= cnt; i++) {
         if (idx[i] < 0) {
-            printf("#define %c %d\n", sym[i], idx[i]);
+            printf("%c=%d, ", sym[i], idx[i]);
         }
     }
+    printf("};\n");
     printf("\n#define x4 _,_,_,_\n");
     printf("#define x16 x4,x4,x4,x4\n");
     printf("#define x64 x16,x16,x16,x16\n");
@@ -168,24 +170,25 @@ void make_template (char * symbols, int cnt, int ter) {
     printf("#define OK 1000\n");
     printf("#define KO 1001\n\n");
     printf("int tape [] = { x256 } ;\n");
-    printf("int * h = tape + 128 ;\n");
+    printf("int * head = tape + 128 ;\n");
     printf("char tsl [] = \"");
     for (int i = '9'; i >= '0'; i--) { putchar(i); }
     putchar('_');
     for (int i = 'A'; i <= 'Z'; i++) { putchar(i); }
     for (int i = 'a'; i <= 'z'; i++) { putchar(i); }
     printf("\" ;\n\n");
-    printf("#define DELTA(q,");
+    printf("#define PRINT printf(\"\\n\\n\\t\\t\");for(int idx=100;idx<140;idx++) printf(\"%%s%%c\", (head==tape+idx)?\"\\033[31m\":\"\\033[0m\",tsl[9-tape[idx]]);printf(\"\\033[0m\\n\")\n\n");
+    printf("#define DELTA(q");
     for (int i = 0; i <= cnt; i++) {
-        printf(" n%c,c%c,m%c,", sym[i], sym[i], sym[i]);
+        printf(", n%c,c%c,m%c", sym[i], sym[i], sym[i]);
     }
     printf(") \\\n\tQ##q: \\\n");
-    printf("\tprintf(\"\\t{State %%d}\\t{read %%c}\\t\",q,tsl[9-*h]);for(int j=100;j<140;j++)printf(\"%%s%%c\",(h==tape+j)?\"\\033[31m\":\"\\033[0m\" ,tsl[1-tape[j]]);printf(\"\\033[0m\\n\"); \\\n\tswitch(*h){ \\\n");
+    printf("\tprintf(\"\\t{State %%d}\\t{read %%c}\\t\",q,tsl[9-*head]);for(int idx=100;idx<140;idx++) printf(\"%%s%%c\",(head==tape+idx)?\"\\033[31m\":\"\\033[0m\" ,tsl[9-tape[idx]]);printf(\"\\033[0m\\n\"); \\\n\tswitch(*head){ \\\n");
     for (int i = 0; i <= cnt; i++) {
         if (ter) {
-            printf("\t\tcase %c:*h=(c%c==_?%c:c%c);h+=\"\\0\\2\\1\"[2 m%c 0]-1;(n%c==_)?({(c%c==_&&2 m%c 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n%c;}); \\\n", sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i]);
+            printf("\t\tcase %c:*head=(c%c==_?%c:c%c);head+=\"\\0\\2\\1\"[2 m%c 0]-1;(n%c==_)?({(c%c==_&&2 m%c 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n%c;}); \\\n", sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i]);
         } else {
-            printf("\t\tcase %c:*h=(c%c==_?%c:c%c);h+=\"\\0\\2\\1\"[2 m%c 0]-1;if(n%c==_){if(c%c==_&&2 m%c 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##n%c;} \\\n", sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i]);
+            printf("\t\tcase %c:*head=(c%c==_?%c:c%c);head+=\"\\0\\2\\1\"[2 m%c 0]-1;if(n%c==_){if(c%c==_&&2 m%c 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##n%c;} \\\n", sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i]);
         }
     }
     printf("\t}\n\nint main () {\n");
@@ -213,13 +216,13 @@ void make_template (char * symbols, int cnt, int ter) {
         printf(")/**/\n");
     }
     putchar('/'); repeat('*', wth); printf("/\n\n\n");
-    putchar('/'); repeat('*', 68); printf("/\n");
-    printf("/**/END_STATES:"); repeat(' ', 51); printf("/**/\n");
-    putchar('/'); repeat('*', 68); printf("/\n");
-    printf("/**/QOK: printf(\"\\n\\n\\t\\t\\t\\033[1;32m Accept \\033[0m\") ; goto Q_ ;/**/\n");
-    printf("/**/QKO: printf(\"\\n\\n\\t\\t\\t\\033[1;31m Reject \\033[0m\") ; goto Q_ ;/**/\n");
-    printf("/**/Q_: printf(\"done\\n\") ; return 0 ;                             /**/\n");
-    putchar('/'); repeat('*', 68); printf("/\n");
+    putchar('/'); repeat('*', 75); printf("/\n");
+    printf("/**/END_STATES:"); repeat(' ', 58); printf("/**/\n");
+    putchar('/'); repeat('*', 75); printf("/\n");
+    printf("/**/QOK: PRINT; printf(\"\\n\\n\\t\\t\\t\\033[1;32m Accept \\033[0m\") ; goto Q_ ;/**/\n");
+    printf("/**/QKO: PRINT; printf(\"\\n\\n\\t\\t\\t\\033[1;31m Reject \\033[0m\") ; goto Q_ ;/**/\n");
+    printf("/**/Q_: printf(\"done\\n\") ; return 0 ;                                    /**/\n");
+    putchar('/'); repeat('*', 75); printf("/\n}\n");
 }
 
 void repeat(char c, int nb) {
