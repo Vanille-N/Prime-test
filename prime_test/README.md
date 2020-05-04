@@ -63,9 +63,6 @@ for (int c = 1; n; c <<= 1) {      // for each bit
 ```
 and is just a compact way to convert the input to base 2.
 
-
-On to the main stuff !
-
 ### N.B.
 
 This machine predates the creation of `tmake` (see in the project root), which is merely a generalization of this.
