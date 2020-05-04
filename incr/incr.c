@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define _ -1
+enum SYMBOLS {_=-1, };
 
 #define x4 _,_,_,_
 #define x16 x4,x4,x4,x4
@@ -19,10 +19,11 @@ char tsl [] = "9876543210_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" 
 	Q##q: \
 	printf("\t{State %d}\t{read %c}\t",q,tsl[9-*head]);for(int idx=100;idx<140;idx++) printf("%s%c",(head==tape+idx)?"\033[31m":"\033[0m" ,tsl[9-tape[idx]]);printf("\033[0m\n"); \
 	switch(*head){ \
-		case _:*head=(c_==_?_:c_);head+="\0\2\1"[2 m_ 0]-1;(n_==_)?({(c_==_&&2 m_ 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n_;}); \
-		case 0:*head=(c0==_?0:c0);head+="\0\2\1"[2 m0 0]-1;(n0==_)?({(c0==_&&2 m0 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n0;}); \
-		case 1:*head=(c1==_?1:c1);head+="\0\2\1"[2 m1 0]-1;(n1==_)?({(c1==_&&2 m1 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n1;}); \
+		case _:*head=(c_==_?_:c_);head+="\0\2\1"[2 m_ 0]-1;if(n_==_){if(c_==_&&2 m_ 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##n_;} \
+		case 0:*head=(c0==_?0:c0);head+="\0\2\1"[2 m0 0]-1;if(n0==_){if(c0==_&&2 m0 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##n0;} \
+		case 1:*head=(c1==_?1:c1);head+="\0\2\1"[2 m1 0]-1;if(n1==_){if(c1==_&&2 m1 0==2){goto Q_;}else{goto Q##q;}}else{goto Q##n1;} \
 	}
+
 
 int main () {
 printf("  input > ");
