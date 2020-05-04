@@ -2,11 +2,9 @@
 
 ## How to create a new Turing machine
 
-This machine is so simple that it is barely interesting, apart from demonstrating how to use `tmake` (see in the project root).
+This machine is so simple that it is barely interesting, apart from demonstrating how to use `tmake`.
 
-Once `tmake` built (see README in project root)
-
-`$ ./tmake 01 -t > incr/raw.c` was run to create a new template, then the template was copied to `incr/incr.c`
+Once `tmake` built (see README in project root), `$ ./tmake 01 -t > incr/incr.c` was run to create a new template, then the template was copied to `incr/raw.c` before modifying anything. (`incr/raw.c` does not compile)
 
 There are only two places where we have to modify the template:
 - input logic after main
