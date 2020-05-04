@@ -1,6 +1,9 @@
 *
+
 !incr/
-!prime_test/
+!prime/
+!palindrome/
+
 !*.c
 !*/*.c
 !*.md
