@@ -8,10 +8,10 @@ The goal is to transform C itself into a language for Turing machines.
 
 This has plenty of advantages:
 - The initialisation of the tape can involve some computation from the input passed at the beginning of the execution
-- The C compiler ensures that the execution is as fast as possible
+- The C compiler ensures that the execution is as fast as possible (more optimized than a homebrewn interpreter could manage) and there is no interpretation overhead
 - The machine is self-contained and does not require another script to be read (apart from the C compiler itself of course)
 - Compiling the machine can be done in a single step: there is no interpreter to compile before use
-- The way of displaying the state of the tape can be easily customized and does not affect other machines, eliminating the need for as many variants of the interpreter as there are machines
+- The way of displaying the state of the tape can be easily customized on a per-machine basis and does not affect other machines, eliminating the need for as many variants of the interpreter as there are machines
 
 The main downsides I can think of are:
 - It requires auxiliary code that is necessary for the C compiler but of no interest to the machine itself (most notably `#include <stdio.h>` and `int main () {`)
