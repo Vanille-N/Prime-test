@@ -27,7 +27,7 @@ char tsl [] = "9876543210_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" 
 
 int main () {
 printf("  input > ");
-char in [10];
+char in [100];
 scanf("%s", in);
 int idx;
 for (idx = 0; in[idx] != '\0'; idx++);
