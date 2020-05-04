@@ -5,6 +5,7 @@
 !palindrome/
 
 !*.c
-!*/*.c
 !*.md
 !*.png
+!*.txt
+!*.py
