@@ -1,4 +1,7 @@
-in.txt
-out.txt
-prime
-tmake
+*
+!incr/
+!prime_test/
+!*.c
+!*/*.c
+!*.md
+!*.png
