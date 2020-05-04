@@ -26,10 +26,11 @@ int is_number (char);
 void cpy (char *, char *, int *);
 int is_valid_symlist (char *, int *);
 int sym_identify (char);
+void make_template (char *, int, char *, int);
+void repeat (char, int);
 
 
 int main (int argc, char * argv []) {
-    printf("%d\n", argc);
     if (argc == 1) { err_too_few(); return TOO_FEW_ARGS; }
     if (argc > 3) { err_too_many(argc); return TOO_MANY_ARGS; }
     if (streq(argv[1], "-h")) {
@@ -56,11 +57,7 @@ int main (int argc, char * argv []) {
         }
     }
 
-
-    // PLACEHOLDER
-    printf("%s\n%s\n", name, symbols);
-    return OK;
-
+    make_template(name, len_name, symbols, cnt_sym);
 }
 
 
@@ -168,4 +165,86 @@ int sym_identify (char s) {
     } else {
         return s - 'a' + 36;
     }
+}
+
+void make_template (char * name, int len, char * symbols, int cnt) {
+    printf("#include <stdio.h>\n\n");
+    int idx [cnt+1];
+    char sym [cnt+1];
+    for (int i = 0; symbols[i] != '\0'; i++) {
+        int id = sym_identify(symbols[i]);
+        if (id <= 9) {
+            idx[i+1] = id;
+            sym[i+1] = symbols[i];
+        } else {
+            idx[i+1] = 8 - id;
+            sym[i+1] = symbols[i];
+        }
+    }
+    idx[0] = -1;
+    sym[0] = '_';
+    for (int i = 0; i <= cnt; i++) {
+        if (idx[i] < 0) {
+            printf("#define %c %d\n", sym[i], idx[i]);
+        }
+    }
+    printf("\n#define x4 _,_,_,_\n");
+    printf("#define x16 x4,x4,x4,x4\n");
+    printf("#define x64 x16,x16,x16,x16\n");
+    printf("#define x256 x64,x64,x64,x64\n");
+    printf("#define OK 1000\n");
+    printf("#define KO 1001\n\n");
+    printf("int tape [] = { x256 } ;\n");
+    printf("int * h = tape + 128 ;\n");
+    printf("char tsl [] = \"");
+    for (int i = '9'; i >= '0'; i--) { putchar(i); }
+    putchar('_');
+    for (int i = 'A'; i <= 'Z'; i++) { putchar(i); }
+    for (int i = 'a'; i <= 'z'; i++) { putchar(i); }
+    printf("\" ;\n\n");
+    printf("#define DELTA(q,");
+    for (int i = 0; i <= cnt; i++) {
+        printf(" n%c,c%c,m%c,", sym[i], sym[i], sym[i]);
+    }
+    printf(") \\\n\tQ##q: \\\n");
+    printf("\tprintf(\"\\t{State %%d}\\t{read %%c}\\t\",q,tsl[9-*h]);for(int j=100;j<140;j++)printf(\"%%s%%c\",(h==tape+j)?\"\\033[31m\":\"\\033[0m\" ,tsl[1-tape[j]]);printf(\"\\033[0m\\n\"); \\\n\tswitch(*h){ \\\n");
+    for (int i = 0; i <= cnt; i++) {
+        printf("\t\tcase %c:*h=(c%c==_?%c:c%c);h+=\"\\0\\2\\1\"[2 m%c 0]-1;(n%c==_)?({(c%c==_&&2 m%c 0==2)?({goto Q_;}):({goto Q##q;});}):({goto Q##n%c;}); \\\n", sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i], sym[i]);
+    }
+    printf("\t}\n\nint main () {\n");
+    printf("printf(\"  input > \");\n");
+    printf("/* Enter here the initialisation logic */\n\n\n");
+    printf("/******************/\n");
+    printf("/**/START_STATE:/**/\n");
+    printf("/******************/\n");
+    printf("/**/  goto Q0;  /**/\n");
+    printf("/******************/\n\n\n");
+    int wth = 24 + 8*cnt;
+    putchar('/'); repeat('*', wth); printf("/\n");
+    printf("/**/TRANSITION_TABLE:"); repeat(' ', wth-23); printf("/**/\n");
+    putchar('/'); repeat('*', wth); printf("/\n");
+    printf("/*        q:  ");
+    for (int i = 0; i <= cnt; i++) {
+        printf(" %c:     ", sym[i]);
+    }
+    printf("  */\n");
+    for (int i = 0; i < 10; i++) {
+        printf("/**/DELTA(  ?");
+        for (int i = 0; i <= cnt; i++) {
+            printf(",  _,_,-");
+        }
+        printf(")/**/\n");
+    }
+    putchar('/'); repeat('*', wth); printf("/\n\n\n");
+    putchar('/'); repeat('*', 68); printf("/\n");
+    printf("/**/END_STATES:"); repeat(' ', 51); printf("/**/\n");
+    putchar('/'); repeat('*', 68); printf("/\n");
+    printf("/**/QOK: printf(\"\\n\\n\\t\\t\\t\\033[1;32m Accept \\033[0m\") ; goto Q_ ;/**/\n");
+    printf("/**/QKO: printf(\"\\n\\n\\t\\t\\t\\033[1;31m Reject \\033[0m\") ; goto Q_ ;/**/\n");
+    printf("/**/Q_: printf(\"done\\n\") ; return 0 ;                             /**/\n");
+    putchar('/'); repeat('*', 68); printf("/\n");
+}
+
+void repeat(char c, int nb) {
+    for (int i = 0; i < nb; i++) putchar(c);
 }
