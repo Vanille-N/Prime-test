@@ -16,3 +16,13 @@ According to the transition table, the machine itself should accept `(a|b)*`, bu
 This machine takes two integers in binary and adds them together, overwriting the leftmost one.
 
 As it is impossible to erase the right number, it is left as 0.
+
+## `sort.c`: Insertion sort
+
+Enter a series of integers between 0 and 31 (both included) in base 10, and the machine will sort them in ascending order. The C code that manages the tape input will stop reading as soon as an invalid value is read.
+
+It is easy to make this work for bigger integers, but as input needs to be left-padded, and in binary, extending the range of integers that can be sorted will reduce the number of them that can fit on the printed portion of the tape.
+
+The length of the displayed tape has already been increased, and can be extended even more by reducing the font of the terminal.
+
+As provided, the machine can display up to 26 integers at once (which seems to be a good compromise between a wide range of values and a large number of them), but this value can be increased or decreased depending on the number of bits per value and the length of the printed tape.
