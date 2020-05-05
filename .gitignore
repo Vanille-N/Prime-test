@@ -2,7 +2,7 @@
 
 !incr/
 !prime/
-!palindrome/
+!examples/
 
 !*.c
 !*.md

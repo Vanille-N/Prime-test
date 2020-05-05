@@ -32,6 +32,8 @@ DELTA( 36, 43,_,>, 37,O,>, 38,I,>,  _,_,<,  _,_,<)
 [...]
 ```
 
+Again, each call to `DELTA` is *not* a command to add a new state, rather it expands into the state itself.
+
 ### NOTE #1 : Program size
 Taking `prime_test/prime.c` as an example, let us study the size of the machine.
 
