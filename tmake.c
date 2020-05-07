@@ -85,7 +85,7 @@ void print_help () {
     printf("-h will display this message then exit\n");
     printf("SYMBOLS is a list of symbols in 0-9a-zA-Z (not separated by spaces)\n");
     printf("Optionally, -t will ensure that no GNU C extensions are used so that the resulting C program is compatible with all C compilers\n");
-    printf("Example: `$ ./tmake 0abX -t` will output a machine with the five symbols `_` (blank), `0`, `a`, `b`, `X`, and no extensions.\n");
+    printf("Example: `$ ./tmake 0abX -t` will output a machine with the five symbols `_` (blank), `0`, `a`, `b`, `X`, and no non-portable constructs.\n");
 }
 
 int is_alpha (char c) {
