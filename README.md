@@ -15,6 +15,7 @@ This has plenty of advantages:
 
 The main downsides I can think of are:
 - It requires auxiliary code that is necessary for the C compiler but of no interest to the machine itself (most notably `#include <stdio.h>` and `int main () {`)
+- The logic is repeated in multiple files, making it harder to apply a change to all machines
 - The extensive use of macros may slow down the compiler a bit, as a lot of useless code is generated before the compiler has to optimize it away. (see NOTE #1)
 - The macro itself is bound to either be unreadable due to lack of proper indentation and formating, or take up more space than necessary and distract from the transition table where the relevant logic is held. I chose the first, but some may prefer a somewhat more readable macro with 20+ lines.
 - There are some risks of name collisions: any character declared as a symbol cannot also be used as a variable. Thus 1-letter variable names are discouraged.
@@ -45,6 +46,7 @@ $ gcc -E prime.c > expanded
 ```
 
 After removing the included code from `expanded`:
+```
 -rw-rw-r--     40513    expanded
 -rwxrwxr-x     42552    prime
 -rwxrwxr-x     26192    prime2
@@ -71,4 +73,4 @@ Example: `$ ./tmake 01ABC > test.c`
 
 If you are using MSVC, then one of the default constructs will fail to compile, as some compilers do not support the GNU extension for statement expressions. In that case, use `$ ./tmake 01ABC -t > test.c` (the `-t` option should come last).
 
-A file is generated: `test.c`, in which the transition table is left blank. See `incr/README.md` for a more detailed example, and EXPLAIN.md for an analysis of the macro itself.
+A file is generated: `test.c`, in which the transition table is left blank. See `incr/README.md` for a more detailed example, and `EXPLAIN.md` for an analysis of the macro itself.

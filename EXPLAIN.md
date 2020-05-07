@@ -124,7 +124,7 @@ On the other hand, consider the much more elegant :
 ```c
 DELTA(  0,  1,_,<,  _,_,>,  _,_,>,  _,_,-,  _,_,-)
 ```
-Left and right are immediately understood without the need for mentally translating `L` and `R` into full words, and the "do not move" transition now has a distinct appearance from the other `_`. NOTE #3 shows that the movement plays a particular role, and deserves a different symbol.
+Left and right are immediately understood without the need for mentally translating `L` and `R` into full words, and the "do not move" transition now has a distinct appearance from the other `_`.
 
 To understand how it works, let's consider a simpler case and expand the macro using the compiler option `-E` :
 
