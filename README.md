@@ -18,8 +18,8 @@ The main downsides I can think of are:
 - The logic is repeated in multiple files, making it harder to apply a change to all machines
 - The extensive use of macros may slow down the compiler a bit, as a lot of useless code is generated before the compiler has to optimize it away. (see NOTE #1)
 - The macro itself is bound to either be unreadable due to lack of proper indentation and formating, or take up more space than necessary and distract from the transition table where the relevant logic is held. I chose the first, but some may prefer a somewhat more readable macro with 20+ lines.
-- There are some risks of name collisions: any character declared as a symbol cannot also be used as a variable. Thus 1-letter variable names are discouraged.
-- There is a restriction on which symbols can be used: only `0-9a-zA-Z` and the blank symbol `_` can be used.
+- There are some risks of name collisions: any character declared as a symbol cannot also be used as a variable. Thus 1-character variable names are discouraged.
+- There is a restriction on which symbols can be used: only `0-9a-zA-Z` and the blank symbol `_` can be written to the tape.
 
 
 One main goal is for the syntax to be readable (yes, this is C code):
