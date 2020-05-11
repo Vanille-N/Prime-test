@@ -1,4 +1,4 @@
-# turing_machine
+# Turing Machine
 
 ## Turning the C language into a language for Turing machines.
 
