@@ -58,6 +58,8 @@ def main(fname):
     is_ko_used = False
 
     f = open(fname, 'r')
+    fbase = re.search(r"^(.*)\.[^\.]+", fname).group(1) + "-structure"
+    print("reading " + fname)
 
     for line in f.readlines():
         if line[0:2] != "/*":
@@ -69,14 +71,16 @@ def main(fname):
             try:
                 curr_state = int(re.search(r".*?([0-9]+)$", blocks[0]).group(1))
             except AttributeError:
-                print("    ! Invalid file format")
+                print("    | Invalid file format")
+                print("    | Could not extract state id from `{}`".format(line.rstrip()))
                 return
             for s,b in zip(symb, blocks[1:]):
                 t = re.search(r" *(OK|KO|_|[0-9]+),(.),(.)", b)
                 try:
                     nq, ns, mv = t.groups()
                 except AttributeError:
-                    print("    ! Invalid file format")
+                    print("    | Invalid file format")
+                    print("    | Could not properly parse `{}` in line `{}`".format(b, line.rstrip()))
                     return
                 if nq == '_' and ns == '_' and mv == '-':
                     continue
@@ -99,9 +103,6 @@ def main(fname):
 
     red = reduce(graph)
 
-    fbase = re.search(r"^(.*)\.[^\.]+", fname).group(1) + "-structure"
-    print(fbase)
-
     with open(".graph.dot", 'w') as f:
         f.write('digraph "Turing machine" {\n')
         f.write('    rankdir=LR size="8,5"\n')
@@ -117,9 +118,12 @@ def main(fname):
         f.write('}\n')
 
     check_call(['dot','-Tpdf','.graph.dot','-o','{}.pdf'.format(fbase)])
+    print("    | Created `{}.pdf`".format(fbase))
     check_call(['dot','-Tpng','.graph.dot','-o','{}.png'.format(fbase)])
+    print("    | Created `{}.png`".format(fbase))
 
     check_call(['rm','.graph.dot'])
 
 for arg in sys.argv[1:]:
     main(arg)
+    print()

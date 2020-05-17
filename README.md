@@ -74,3 +74,59 @@ Example: `$ ./tmake 01ABC > test.c`
 If you are using MSVC, then one of the default constructs will fail to compile, as some compilers do not support the GNU extension for statement expressions. In that case, use `$ ./tmake 01ABC -t > test.c` (the `-t` option should come last).
 
 A file is generated: `test.c`, in which the transition table is left blank. See `incr/README.md` for a more detailed example, and `EXPLAIN.md` for an analysis of the macro itself.
+
+## How to use `graph.py`
+
+Make sure that `graphviz` is installed (command `dot`).
+
+The script uses `dot` to render a representation of the machine as an oriented graph with labeled edges.
+
+Example:
+
+<img src="incr/incr-structure.png" size=300>
+
+To execute the tool, launch `$ python3 graph.py [SOURCE ...]`. You can provide any number of sources, they will all be read sequentially and both a `.pdf` and a `.png` output will be created, in the original directory of the source.
+
+If a file has an invalid format, it will be ignored.
+
+In particular, be aware that the following changes to the machine will result in source code not readable by the script:
+- renaming the macro to something other than `DELTA`
+- extra space between the arguments corresponding to a same symbol (in the transition function)
+- not having groups of arguments for each symbol separated by `,⎵` (at least one space)
+
+Additionally, all of the following will be ignored:
+- initial state other that 0
+- QOK and QKO with different names
+- additional terminal states
+- lines that do not begin with `/*`
+
+
+Example execution:
+
+To quickly render all files:
+```
+$ ./graph.py */*.c
+reading examples/add.c
+    | Created `examples/add-structure.pdf`
+    | Created `examples/add-structure.png`
+
+reading examples/palindrome.c
+    | Created `examples/palindrome-structure.pdf`
+    | Created `examples/palindrome-structure.png`
+
+reading examples/sort.c
+    | Created `examples/sort-structure.pdf`
+    | Created `examples/sort-structure.png`
+
+reading incr/incr.c
+    | Created `incr/incr-structure.pdf`
+    | Created `incr/incr-structure.png`
+
+reading incr/raw.c
+    | Invalid file format
+    | Could not extract state id from `/**/DELTA(  ?,  _,_,-,  _,_,-,  _,_,-)/**/`
+
+reading prime/prime.c
+    | Created `prime/prime-structure.pdf`
+    | Created `prime/prime-structure.png`
+```
