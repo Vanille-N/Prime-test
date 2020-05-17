@@ -4,8 +4,6 @@ import re
 from subprocess import check_call
 import sys
 
-
-
 def reduce(g):
     table = {}
     for (s, q, nq, ns, mv) in g:
@@ -98,8 +96,6 @@ def main(fname):
         else:
             # useless line
             continue
-
-    #print(graph, symb)
 
     red = reduce(graph)
 
