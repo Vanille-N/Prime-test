@@ -10,6 +10,12 @@ This Turing machine accepts palindromes of `a` and `b`.
 
 According to the transition table, the machine itself should accept `(a|b)*`, but C's `scanf("%s")` will fail to read an empty string, thus the resulting executable accepts `(a|b)+` (using PCRE notation).
 
+<object data="palindrome.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="palindrome-structure.pdf">
+        <p>This browser does not support PDFs. Direct link: <a href="palindrome.pdf">palindrome-structure</a>.</p>
+    </embed>
+</object>
+
 ### Examples
 
 ```
