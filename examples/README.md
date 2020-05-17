@@ -10,6 +10,25 @@ This Turing machine accepts palindromes of `a` and `b`.
 
 According to the transition table, the machine itself should accept `(a|b)*`, but C's `scanf("%s")` will fail to read an empty string, thus the resulting executable accepts `(a|b)+` (using PCRE notation).
 
+### Examples
+
+```
+input> abbaba
+
+[...]
+_______________________xxxaxx___________
+
+Reject done
+```
+```
+input> abbabba
+
+[...]
+______________________xxxxxxx___________
+
+Accept done
+```
+
 
 ## `add.c`: Binary adder
 
