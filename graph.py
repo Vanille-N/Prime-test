@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import re
-from graphviz import Digraph
+from subprocess import check_call
 
 graph = [] # list of graph edges
 symb = [] # list of symbols
@@ -58,17 +58,19 @@ def make_label(s, ns, mv):
         else:
             return '{}:{}({})'.format(s, ns, mv)
 
+with open(".graph.dot", 'w') as f:
+    f.write('digraph "Turing machine" {\n')
+    f.write('    rankdir=LR size="8,5"\n')
+    f.write('    node [shape=doublecircle]\n')
+    f.write('    q0\n')
+    if is_ok_used: f.write('    qOK\n')
+    if is_ko_used: f.write('    qKO\n')
 
-f = Digraph('Turing machine', filename='fsm.gv')
-f.attr(rankdir='LR', size='8,5')
+    f.write('    node [shape=circle]\n')
 
-f.attr('node', shape='doublecircle')
-f.node('q0')
-if is_ok_used: f.node('qOK')
-if is_ko_used: f.node('qKO')
+    for (s, q, nq, ns, mv) in graph:
+        f.write('    q{} -> q{} [label="{}"]\n'.format(q, nq, make_label(s, ns, mv)))
+    f.write('}\n')
 
-f.attr('node', shape='circle')
-for (s, q, nq, ns, mv) in graph:
-    f.edge('q{}'.format(q), 'q{}'.format(nq), label=make_label(s, ns, mv))
-
-f.view()
+check_call(['dot','-Tpdf','.graph.dot','-o','machine.pdf'])
+check_call(['rm','.graph.dot'])
