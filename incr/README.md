@@ -80,3 +80,26 @@ There are more options that are not seen here:
 - a blank transition ` _,_,-,` means that the execution should be aborted without giving an answer
 
 Note that ` _,_,>,` is not a blank transition, as a movement occurs. ` _,_,-,` would result in an infinite loop if it were interpreted as a regular transition, thus it would be useless. This is in part why it was chosen to represent an undefined transition, instead of introducing another syntax.
+
+
+
+### Examples:
+
+```
+input> 100101
+
+_______________________100101___________
+[...]
+_______________________100110___________
+
+Accept done
+```
+``
+input> 1111111111
+
+____________________1111111111___________
+[...]
+___________________10000000000___________
+
+Accept done
+```
