@@ -12,6 +12,7 @@ According to the transition table, the machine itself should accept `(a|b)*`, bu
 
 [embed]https://github.com/Vanille-N/turing_machine/examples/palindrome-structure.pdf[/embed]
 
+
 ### Examples
 
 ```
