@@ -66,3 +66,24 @@ It is easy to make this work for bigger integers, but as input needs to be left-
 The length of the displayed tape has already been increased, and can be extended even more by reducing the font of the terminal.
 
 As provided, the machine can display up to 26 integers at once (which seems to be a good compromise between a wide range of values and a large number of them), but this value can be increased or decreased depending on the number of bits per value and the length of the printed tape.
+
+### Examples
+
+```
+input> 5 1 4 3 2 0 -1
+
+__00101_00001_00100_00011_00010_00000____________________________________________________________________________________________________________________________
+[...]
+__00000_00001_00010_00011_00100_00101____________________________________________________________________________________________________________________________
+
+Accept done
+```
+```
+input> 12 4 31 9 28 21 26 13 17 9 16 30 24 24 6 7 18 31 4 14 15 19 30 29 27 28 -1
+
+__01100_00100_11111_01001_11100_10101_11010_01101_10001_01001_10000_11110_11000_11000_00110_00111_10010_11111_00100_01110_01111_10011_11110_11101_11011_11100____
+[...]
+__00100_00100_00110_00111_01001_01001_01100_01101_01110_01111_10000_10001_10010_10011_10101_11000_11000_11010_11011_11100_11100_11101_11110_11110_11111_11111____
+
+Accept done
+```
