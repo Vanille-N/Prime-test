@@ -29,6 +29,12 @@ def reduce(g):
         red.append((q, nq, table[(q, nq)]))
     return red
 
+def translate_symbol(s):
+    return s.replace('_', '⎵')
+
+def translate_move(mv):
+    return {'<': '🡨', '>': '🡪'}[mv]
+
 def make_label(lst):
     label = ""
     for (s, ns, mv) in lst:
@@ -36,14 +42,14 @@ def make_label(lst):
             label += '\n'
         if ns == '_':
             if mv == '-':
-                label += '{}'.format(s)
+                label += '{}'.format(translate_symbol(s))
             else:
-                label += '{}:{}'.format(s, {"<": "←", ">": "→"}[mv])
+                label += '{}:{}'.format(translate_symbol(s), translate_move(mv))
         else:
             if mv == '-':
-                label += '{}:[{}]'.format(s, ns)
+                label += '{}:[{}]'.format(translate_symbol(s), ns)
             else:
-                label += '{}:[{}]{}'.format(s, ns, {"<": "←", ">": "→"}[mv])
+                label += '{}:[{}]{}'.format(translate_symbol(s), ns, translate_move(mv))
     return label
 
 def main(fname):
@@ -62,10 +68,18 @@ def main(fname):
         if "DELTA" in line:
             # transition
             blocks = line.split(', ')
-            curr_state = int(re.search(r".*?([0-9]+)$", blocks[0]).group(1))
+            try:
+                curr_state = int(re.search(r".*?([0-9]+)$", blocks[0]).group(1))
+            except AttributeError:
+                print("    ! Invalid file format")
+                return
             for s,b in zip(symb, blocks[1:]):
                 t = re.search(r" *(OK|KO|_|[0-9]+),(.),(.)", b)
-                nq, ns, mv = t.groups()
+                try:
+                    nq, ns, mv = t.groups()
+                except AttributeError:
+                    print("    ! Invalid file format")
+                    return
                 if nq == '_' and ns == '_' and mv == '-':
                     continue
                 if nq == '_':
