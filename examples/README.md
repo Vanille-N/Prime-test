@@ -36,7 +36,28 @@ This machine takes two integers in binary and adds them together, overwriting th
 
 As it is impossible to erase the right number, it is left as 0.
 
-## `sort.c`: Insertion sort
+### Examples
+
+```
+input> 100101 111
+
+___________________100101_111_________
+[...]
+___________________101100_000___________
+
+Accept done
+```
+```
+input> 1111111 111
+
+__________________1111111_111___________
+[...]
+_________________10000110_000___________
+
+Accept done
+```
+
+## `sort.c`: Gnome sort
 
 Enter a series of integers between 0 and 31 (both included) in base 10, and the machine will sort them in ascending order. The C code that manages the tape input will stop reading as soon as an invalid value is read.
 
