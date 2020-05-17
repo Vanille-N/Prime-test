@@ -72,5 +72,7 @@ with open(".graph.dot", 'w') as f:
         f.write('    q{} -> q{} [label="{}"]\n'.format(q, nq, make_label(s, ns, mv)))
     f.write('}\n')
 
-check_call(['dot','-Tpdf','.graph.dot','-o','machine.pdf'])
+#check_call(['dot','-Tpdf','.graph.dot','-o','machine.pdf'])
+check_call(['dot','-Tpng','.graph.dot','-o','machine.png'])
+
 check_call(['rm','.graph.dot'])

@@ -81,7 +81,7 @@ There are more options that are not seen here:
 
 Note that ` _,_,>,` is not a blank transition, as a movement occurs. ` _,_,-,` would result in an infinite loop if it were interpreted as a regular transition, thus it would be useless. This is in part why it was chosen to represent an undefined transition, instead of introducing another syntax.
 
-
+<img src="incr-structure.png" width=300>
 
 ### Examples:
 
@@ -94,7 +94,7 @@ _______________________100110___________
 
 Accept done
 ```
-``
+```
 input> 1111111111
 
 ____________________1111111111___________

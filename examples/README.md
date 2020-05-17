@@ -10,8 +10,7 @@ This Turing machine accepts palindromes of `a` and `b`.
 
 According to the transition table, the machine itself should accept `(a|b)*`, but C's `scanf("%s")` will fail to read an empty string, thus the resulting executable accepts `(a|b)+` (using PCRE notation).
 
-[embed]https://github.com/Vanille-N/turing_machine/examples/palindrome-structure.pdf[/embed]
-
+<img src="palindrome-structure.png" width=400>
 
 ### Examples
 
@@ -38,6 +37,9 @@ Accept done
 This machine takes two integers in binary and adds them together, overwriting the leftmost one.
 
 As it is impossible to erase the right number, it is left as 0.
+
+
+<img src="add-structure.png" width=600>
 
 ### Examples
 
@@ -69,6 +71,8 @@ It is easy to make this work for bigger integers, but as input needs to be left-
 The length of the displayed tape has already been increased, and can be extended even more by reducing the font of the terminal.
 
 As provided, the machine can display up to 26 integers at once (which seems to be a good compromise between a wide range of values and a large number of them), but this value can be increased or decreased depending on the number of bits per value and the length of the printed tape.
+
+<img src="sort-structure.png" width=1000>
 
 ### Examples
 
