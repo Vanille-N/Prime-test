@@ -1,5 +1,7 @@
 # Turing Machine
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Turning the C language into a language for Turing machines.
 
 This project is *not* a Turing machine compiler written in C. There are already plenty of those.

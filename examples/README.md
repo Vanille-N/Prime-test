@@ -1,4 +1,6 @@
-# examples
+# Examples
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This folder contains a few examples.
 
