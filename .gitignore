@@ -1,8 +1,5 @@
-*
-
-!incr/
-!prime/
-!examples/
+tmake
+*/*
 
 !*.c
 !*.md
